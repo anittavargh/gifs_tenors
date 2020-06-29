@@ -7,7 +7,7 @@ const Tenor = require('tenorjs').client({
     "DateFormat": "D/MM/YYYY - H:mm:ss A" // Change this accordingly
 });
 
-
+// returns urls for the requested gifs and tenors respectively
 module.exports.gify_tenor = async (req,res) =>{
     try{
         var platform = req.body.platform
