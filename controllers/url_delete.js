@@ -20,7 +20,7 @@ module.exports.delete = async(req,res)=>{
                 return;
             }
             console.log('Data deleted successful'); 
-            res.end("deleted url") 
+            res.send({"deleted url":url}) 
             client.end();
 
         })
