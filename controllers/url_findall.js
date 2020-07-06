@@ -1,6 +1,6 @@
 const {Client } = require('pg')
 
-module.exports.find = async(req,res)=>{
+module.exports.findall = async(req,res)=>{
     try{
         const client = new Client({
             user: 'osmeabpoxvwjjw',
