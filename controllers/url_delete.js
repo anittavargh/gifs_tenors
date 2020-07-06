@@ -1,6 +1,6 @@
 const {Client } = require('pg')
 
-module.exports.delete = async(req,res)=>{
+module.exports.delete = async(req,resp)=>{
     try{
 
         var url = req.body.url;
@@ -20,7 +20,7 @@ module.exports.delete = async(req,res)=>{
                 return;
             }
             console.log('Data deleted successful'); 
-            res.send({"deleted url":url}) 
+            resp.send({"deleted url":url}) 
             client.end();
 
         })
