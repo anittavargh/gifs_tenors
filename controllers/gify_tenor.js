@@ -55,7 +55,7 @@ module.exports.gify_tenor = async (req,res) =>{
                 response.data.results.forEach((obj) => {
                     console.log(obj.url)
                     var url = obj.url
-                    a.push(url)
+                    array.push(url)
                     const query = ` INSERT INTO urls_table(platform, scenario, url)VALUES ('${platform}','${scenario}','${url}') `;
                     client.query(query, (err, res) => {
                     if (err) {
