@@ -1,8 +1,6 @@
 const { Client } = require('pg');
-//const  gifSearch = require('gif-search');
 var GphApiClient = require('giphy-js-sdk-core')
 var cclient = GphApiClient("Ofh1y8TzYh21zRIZbagBZzdcE3Fa9WgB")
-
 const Tenor = require('tenorjs').client({
     "Key": "ME88GIAQY4GO", // https://tenor.com/developer/keyregistration
     "Filter": "off", // "off", "low", "medium", "high", not case sensitive
@@ -17,6 +15,7 @@ module.exports.gify_tenor = async (req,res) =>{
         //from request.body
         var platform = req.body.platform
         var scenario = req.body.scenario
+        var array = []
         
         //postgres client connection
         const client = new Client({
@@ -30,18 +29,12 @@ module.exports.gify_tenor = async (req,res) =>{
 
         //gif returning and inserting into db
         if(platform == "gify"||platform == null){
-            // gifSearch.query(scenario)
-            // .then(function async (gifUrl){
-
             cclient.search('gifs', {"q": scenario,"limit":20})
             .then(function async (response){
                 response.data.forEach((gifObject) => {
-                    //console.log(gifObject.url)
                 var url = gifObject.url
-                //var url = gifUrl
-                //res.send({"gifys":url})
-                const query = ` INSERT INTO urls_table(scenario,platform,url)
-                               VALUES ('${scenario}','${platform}','${url}') `;
+                array.push(url)
+                const query = ` INSERT INTO urls_table(scenario,platform,url)VALUES ('${scenario}','${platform}','${url}') `;
                     client.query(query, (err, res) => {
                         if (err) {
                             console.error(err);
@@ -49,7 +42,12 @@ module.exports.gify_tenor = async (req,res) =>{
                         }
                         console.log('Data insert successful');
                         //client.end();
-                    });
+                    });                    
+                })
+                res.send({
+                    "platform":platform,
+                    "scenario":scenario,
+                    urls:array
                 })
             })
         }
