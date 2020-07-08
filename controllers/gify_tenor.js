@@ -39,7 +39,7 @@ module.exports.gify_tenor = async (req,res) =>{
                     //console.log(gifObject.url)
                 var url = gifObject.url
                 //var url = gifUrl
-                res.send({"gifys":url})
+                //res.send({"gifys":url})
                 const query = ` INSERT INTO urls_table(scenario,platform,url)
                                VALUES ('${scenario}','${platform}','${url}') `;
                     client.query(query, (err, res) => {
