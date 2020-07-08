@@ -48,7 +48,7 @@ module.exports.gify_tenor = async (req,res) =>{
                             return;
                         }
                         console.log('Data insert successful');
-                        client.end();
+                        //client.end();
                     });
                 })
             })
