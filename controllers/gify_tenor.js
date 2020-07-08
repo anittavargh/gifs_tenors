@@ -1,13 +1,7 @@
 const { Client } = require('pg');
+const axios = require('axios');
 var GphApiClient = require('giphy-js-sdk-core')
 var cclient = GphApiClient("Ofh1y8TzYh21zRIZbagBZzdcE3Fa9WgB")
-const Tenor = require('tenorjs').client({
-    "Key": "ME88GIAQY4GO", // https://tenor.com/developer/keyregistration
-    "Filter": "off", // "off", "low", "medium", "high", not case sensitive
-    "Locale": "en_US", // Your locale here, case-sensitivity depends on input
-    "MediaFilter": "minimal", // either minimal or basic, not case sensitive
-    "DateFormat": "D/MM/YYYY - H:mm:ss A" // Change this accordingly
-});
 
 // returns urls for the requested gifs and tenors respectively
 module.exports.gify_tenor = async (req,res) =>{
@@ -56,26 +50,30 @@ module.exports.gify_tenor = async (req,res) =>{
 
         //tenor returning
         if(platform == "tenor"){
-            Tenor.Search.Random(scenario, "20").then(Results => {
-                Results.forEach(function async (Post){
-                    var url = Post.url
-                    console.log(url)
-                    res.send({"tenors":url});
-                    const query = ` INSERT INTO urls_table (scenario,platform,url)
-                    VALUES ('${scenario}','${platform}','${url}') `;
+            axios.get(`https://api.tenor.com/v1/search?q='${scenario}'&key=ME88GIAQY4GO&limit=20`)
+            .then(function (response) {
+                response.data.results.forEach((obj) => {
+                    console.log(obj.url)
+                    var url = obj.url
+                    a.push(url)
+                    const query = ` INSERT INTO urls_table(platform, scenario, url)VALUES ('${platform}','${scenario}','${url}') `;
                     client.query(query, (err, res) => {
                     if (err) {
-                    console.error(err);
-                    return;
+                        console.error(err);
+                        return;
                     }
                     console.log('Data insert successful');
-                    client.end();
                     });
-                });
+                })
+                res.send({
+                    "platform":platform,
+                    "scenario":scenario,
+                    "urls":array
+                })
+          
             })
         }
-    }
-    catch(error){
+    }catch(error){
         console.log(error)
     }
 }
