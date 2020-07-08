@@ -1,5 +1,8 @@
 const { Client } = require('pg');
-const  gifSearch = require('gif-search');
+//const  gifSearch = require('gif-search');
+var GphApiClient = require('giphy-js-sdk-core')
+var cclient = GphApiClient("Ofh1y8TzYh21zRIZbagBZzdcE3Fa9WgB")
+
 const Tenor = require('tenorjs').client({
     "Key": "ME88GIAQY4GO", // https://tenor.com/developer/keyregistration
     "Filter": "off", // "off", "low", "medium", "high", not case sensitive
@@ -27,20 +30,27 @@ module.exports.gify_tenor = async (req,res) =>{
 
         //gif returning and inserting into db
         if(platform == "gify"||platform == null){
-            gifSearch.query(scenario)
-            .then(function async (gifUrl){
-                var url = gifUrl
+            // gifSearch.query(scenario)
+            // .then(function async (gifUrl){
+
+            cclient.search('gifs', {"q": scenario,"limit":20})
+            .then(function async (response){
+                response.data.forEach((gifObject) => {
+                    //console.log(gifObject.url)
+                var url = gifObject.url
+                //var url = gifUrl
                 res.send({"gifys":url})
                 const query = ` INSERT INTO urls_table(scenario,platform,url)
                                VALUES ('${scenario}','${platform}','${url}') `;
-                client.query(query, (err, res) => {
-                    if (err) {
-                        console.error(err);
-                        return;
-                    }
-                    console.log('Data insert successful');
-                    client.end();
-                });
+                    client.query(query, (err, res) => {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                        console.log('Data insert successful');
+                        client.end();
+                    });
+                })
             })
         }
 
@@ -48,7 +58,7 @@ module.exports.gify_tenor = async (req,res) =>{
 
         //tenor returning
         if(platform == "tenor"){
-            Tenor.Search.Random(scenario, "1").then(Results => {
+            Tenor.Search.Random(scenario, "20").then(Results => {
                 Results.forEach(function async (Post){
                     var url = Post.url
                     console.log(url)
