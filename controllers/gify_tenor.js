@@ -1,7 +1,6 @@
 const { Client } = require('pg');
 const axios = require('axios');
 var GphApiClient = require('giphy-js-sdk-core')
-var cclient = GphApiClient("Ofh1y8TzYh21zRIZbagBZzdcE3Fa9WgB")
 
 // returns urls for the requested gifs and tenors respectively
 module.exports.gify_tenor = async (req,res) =>{
@@ -23,6 +22,7 @@ module.exports.gify_tenor = async (req,res) =>{
 
         //gif returning and inserting into db
         if(platform == "gify"||platform == null){
+            var cclient = GphApiClient(process.env.GIF_KEY)
             cclient.search('gifs', {"q": scenario,"limit":20})
             .then(function async (response){
                 response.data.forEach((gifObject) => {
@@ -50,7 +50,7 @@ module.exports.gify_tenor = async (req,res) =>{
 
         //tenor returning
         if(platform == "tenor"){
-            axios.get(`https://api.tenor.com/v1/search?q='${scenario}'&key=ME88GIAQY4GO&limit=20`)
+            axios.get(`https://api.tenor.com/v1/search?q='${scenario}'&key=${process.env.TENOR_KEY}&limit=20`)
             .then(function (response) {
                 response.data.results.forEach((obj) => {
                     console.log(obj.url)
