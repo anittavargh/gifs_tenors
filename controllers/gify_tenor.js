@@ -13,11 +13,11 @@ module.exports.gify_tenor = async (req,res) =>{
         
         //postgres client connection
         const client = new Client({
-            user: 'osmeabpoxvwjjw',
-            host: 'ec2-54-234-44-238.compute-1.amazonaws.com',
-            database: 'de0g72m4jmt53o',
-            password: '2543e3f93ab1a9043dc3b65bb5422bee4342bc0dad80388bb2a8a7abc7839381',
-            port: 5432,
+            "user": process.env.DB_USER,
+            "host": process.env.DB_HOST,
+            "database": process.env.DB_DATABASE,
+            "password": process.env.DB_PASSWORD,
+            "port": process.env.DB_PORT
           })
           client.connect(console.log("successfully connected!!!!!"))
 
