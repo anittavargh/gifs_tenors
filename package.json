@@ -16,7 +16,7 @@
     "gif-search": "^2.1.0",
     "giphy-js-sdk-core": "^1.0.6",
     "http-errors": "^1.6.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "morgan": "^1.9.1",
     "parser": "^0.1.4",
     "path": "^0.12.7",
